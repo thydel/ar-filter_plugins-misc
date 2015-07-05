@@ -14,7 +14,7 @@
 #
 # make a dict of dict of dict from a result list of dict of dict
 #
-# find item to use as key in n.item
+# find item to use as key in item.n
 #
 # - { set_fact: { lst: [ { name: foo, attr: some }, { name: bar, attr: other } ] }}
 # - { command: tst {{ item.name }} {{ item.attr }}, register: tsts, with_items: lst }
@@ -29,8 +29,10 @@
 def dictify(l, n='name'):
     r = {}
     for i in l:
-        if type(i['item']) == type(dict()):
+        if type(i['item']) == type({}):
             r[i['item'][n]] = i
+        elif type(i['item']) == type([]):
+            r[i['item'][0 if n == 'name' else n]] = i
         else:
             r[i['item']] = i
 
